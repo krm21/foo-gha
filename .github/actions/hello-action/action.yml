@@ -1,0 +1,13 @@
+name: "Hello Action"
+description: "A custom action to print Hello <name>"
+inputs:
+  name:
+    description: "The name to greet"
+    required: true
+    default: "World"
+runs:
+  using: "composite"
+  steps:
+    - name: Print greeting
+      run: ./script.sh ${{ inputs.name }}
+      shell: bash
