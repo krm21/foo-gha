@@ -9,10 +9,6 @@ jobs:
   say-hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Say Hello
-        uses: ./.github/actions/hello-action
-        with:
-          name: "GitHub User"
+      - name: scriptss
+        run: |
+          echo ${{ github }}
