@@ -12,3 +12,9 @@ jobs:
       - name: scriptss
         run: |
           echo ${{ github.repository }}
+          echo "Event name: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Git Ref: ${{ github.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Workflow Name: ${{ github.workflow }}"
+
