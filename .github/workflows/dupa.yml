@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: scriptss
         run: |
-          echo ${{ github }}
+          echo ${{ github.repository }}
