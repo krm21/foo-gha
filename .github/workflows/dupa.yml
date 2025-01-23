@@ -9,7 +9,7 @@ jobs:
   say-hello:
     runs-on: ubuntu-latest
     outputs:
-      sdf: ${{ steps.foo.outputs.kek }}
+      sdf: ${{ steps.foo.outputs.ers }}
     steps:
       - name: scriptss
         id: foo
