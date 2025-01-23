@@ -26,4 +26,7 @@ jobs:
       - name: nextone
         run: |
           echo ${{ steps.foo.outputs.kek }}
+          echo ${{ steps.foo.outputs }}
+          echo ${{ steps.foo }}
+          echo ${{ steps }}
           
