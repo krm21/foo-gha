@@ -8,6 +8,8 @@ on:
 jobs:
   say-hello:
     runs-on: ubuntu-latest
+    outputs:
+      sdf: ${{ steps.foo.outputs.kek }}
     steps:
       - name: scriptss
         id: foo
@@ -28,5 +30,11 @@ jobs:
           echo ${{ steps.foo.outputs.kek }}
           echo ${{ steps.foo.outputs }}
           echo ${{ steps.foo }}
-          echo ${{ steps }}
-          
+          echo ${{ steps }}   
+  elo:
+    needs: say-hello
+    runs-on: ubuntu-latest
+    steps:
+      - name: xd
+        run: |
+          echo ${{ needs.say-hello.outputs.sdf }}
