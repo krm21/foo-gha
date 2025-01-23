@@ -20,4 +20,6 @@ jobs:
           echo "Run Number: ${{ github.run_number }}"
           echo $JOB_VAR
           printenv | sort
+          echo "duppa" >> $GITHUB_OUTPUT
+          echo "xddd" >> $GITHUB_OUTPUT
           
