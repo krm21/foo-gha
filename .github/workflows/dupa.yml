@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: scriptss
+        id: foo
         run: |
           echo ${{ github.repository }}
           echo "Event name: ${{ github.event_name }}"
@@ -22,4 +23,7 @@ jobs:
           # printenv | sort
           echo "ers=duppa" >> $GITHUB_OUTPUT
           echo "kek=xddd" >> $GITHUB_OUTPUT
+      - name: nextone
+        run: |
+          echo ${{ steps.foo.outputs.kek }}
           
