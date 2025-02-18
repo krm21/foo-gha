@@ -3,11 +3,14 @@ on: [push]
 jobs:
   create-pr:
     runs-on: ubuntu-latest
+    env:
+      XD: ${{ secrets.DUPA_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - run: |
           echo ${{ github.event_name }}
           git log --oneline -5
+          echo $XD
 
 # name: GitHub Actions Demo
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
