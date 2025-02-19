@@ -11,8 +11,11 @@ jobs:
           repository: krm21/myaction
           token: ${{ secrets.MYACTION_TOKEN }}
           path: private-action
+
+      - run: |
+          find
           
-      - uses: ./private-action/foo/bar@main
+      - uses: ./private-action/foo/bar
         with: 
           message: ☠️☠️💀
       # - uses: krm21/js-action@main
