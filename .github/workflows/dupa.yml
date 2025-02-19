@@ -12,6 +12,8 @@ jobs:
           git log --oneline -5
           echo $XD
       - uses: krm21/myaction@main
+        with:
+          message: 🥳🍺😎
 
 # name: GitHub Actions Demo
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
