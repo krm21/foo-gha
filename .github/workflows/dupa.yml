@@ -7,6 +7,8 @@ jobs:
       XD: ${{ secrets.DUPA_SECRET }}
     steps:
       - uses: krm21/js-action@main
+        with:
+          message: 🍕🌃☃️
       # - uses: actions/checkout@v4
       # - run: |
       #     echo ${{ github.event_name }}
