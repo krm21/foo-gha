@@ -11,6 +11,7 @@ jobs:
           echo ${{ github.event_name }}
           git log --oneline -5
           echo $XD
+          echo ${{ secrets.USER_GITHUB_TOKEN }}
 
 # name: GitHub Actions Demo
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
