@@ -9,6 +9,8 @@ jobs:
       - uses: krm21/myaction/foo/bar@main
         with: 
           message: ☠️☠️💀
+        env:
+          GITHUB_TOKEN: ${{ secrets.MYACTION_TOKEN }}
       # - uses: krm21/js-action@main
       #   with:
       #     message: 🍕🌃☃️
