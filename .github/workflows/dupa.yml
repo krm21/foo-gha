@@ -6,14 +6,15 @@ jobs:
     env:
       XD: ${{ secrets.DUPA_SECRET }}
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          echo ${{ github.event_name }}
-          git log --oneline -5
-          echo $XD
-      - uses: krm21/myaction@main
-        with:
-          message: 🥳🍺😎
+      - uses: krm21/js-action@main
+      # - uses: actions/checkout@v4
+      # - run: |
+      #     echo ${{ github.event_name }}
+      #     git log --oneline -5
+      #     echo $XD
+      # - uses: krm21/myaction@main
+      #   with:
+      #     message: 🥳🍺😎
 
 # name: GitHub Actions Demo
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
