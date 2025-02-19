@@ -8,11 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: 
-          repository: krm21/myaction/foo/bar@main
+          repository: krm21/myaction
           token: ${{ secrets.MYACTION_TOKEN }}
           path: private-action
           
-      - uses: ./private-action
+      - uses: ./private-action/foo/bar@main
         with: 
           message: ☠️☠️💀
       # - uses: krm21/js-action@main
