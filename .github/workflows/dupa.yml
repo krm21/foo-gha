@@ -6,11 +6,15 @@ jobs:
     env:
       XD: ${{ secrets.DUPA_SECRET }}
     steps:
-      - uses: krm21/myaction/foo/bar@main
+      - uses: actions/checkout@v4
+        with: 
+          repository: krm21/myaction/foo/bar@main
+          token: ${{ secrets.MYACTION_TOKEN }}
+          path: private-action
+          
+      - uses: ./private-action
         with: 
           message: ☠️☠️💀
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYACTION_TOKEN }}
       # - uses: krm21/js-action@main
       #   with:
       #     message: 🍕🌃☃️
