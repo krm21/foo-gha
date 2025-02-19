@@ -6,9 +6,6 @@ jobs:
     env:
       XD: ${{ secrets.DUPA_SECRET }}
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13' 
       - uses: krm21/myaction/foo/bar@main
         with: 
           message: ☠️☠️💀
