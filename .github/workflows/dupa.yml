@@ -1,23 +1,46 @@
-name: Github actions repo and pr creation
-on: [push]
-jobs:
-  create-pr:
-    runs-on: ubuntu-latest
-    env:
-      XD: ${{ secrets.DUPA_SECRET }}
-    steps:
-      - uses: actions/checkout@v4
-        with: 
-          repository: krm21/myaction
-          token: ${{ secrets.MYACTION_TOKEN }}
-          path: private-action
+name: PR Commenter
 
-      - run: |
-          find
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add comment to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 Thanks for your pull request!
+            Our team will review it soon. Stay tuned for updates! 😊
+          reactions: '+1, heart'
+
+
+# name: Github actions repo and pr creation
+# on: [push]
+# jobs:
+#   create-pr:
+#     runs-on: ubuntu-latest
+#     env:
+#       XD: ${{ secrets.DUPA_SECRET }}
+#     steps:
+#       - uses: actions/checkout@v4
+#         with: 
+#           repository: krm21/myaction
+#           token: ${{ secrets.MYACTION_TOKEN }}
+#           path: private-action
+
+#       - run: |
+#           find
           
-      - uses: ./private-action/foo/bar
-        with: 
-          message: ☠️☠️💀
+#       - uses: ./private-action/foo/bar
+#         with: 
+#           message: ☠️☠️💀
       # - uses: krm21/js-action@main
       #   with:
       #     message: 🍕🌃☃️
