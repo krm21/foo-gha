@@ -22,6 +22,10 @@ jobs:
           PR_AUTHOR_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "${{ github.api_url }}/repos/${{ github.repository }}/commits/${{ github.event.pull_request.head.sha }}" | jq -r '.commit.author.email')
 
+          if [[ "$PR_AUTHOR_EMAIL" == *"noreply.github.com" ]]; then
+            PR_AUTHOR_EMAIL="Private Email (noreply)"
+          fi
+
           echo "PR Title: $PR_TITLE"
           echo "PR Author: $PR_AUTHOR"
           echo "PR Email: $PR_AUTHOR_EMAIL"
@@ -29,7 +33,7 @@ jobs:
           echo "pr_title=$PR_TITLE" >> $GITHUB_ENV
           echo "pr_author=$PR_AUTHOR" >> $GITHUB_ENV
           echo "pr_author_email=$PR_AUTHOR_EMAIL" >> $GITHUB_ENV
-
+          
       - name: Check PR Title Format
         run: |
           echo "Validating PR title..."
