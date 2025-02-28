@@ -17,9 +17,19 @@ jobs:
       - run: |
           gh pr list
 
-      - name: Get user's email
-        id: user_email
+      - name: Dump PR Object to File (Proper JSON Formatting)
         run: |
-          git checkout remotes/origin/${{ github.head_ref }}
-          echo "::set-output name=user_email::$(git log -n 1 --pretty=format:%ae)"
+          printf '%s' '${{ toJSON(github.event.pull_request) }}' | jq '.' > pr_object.json
+        shell: bash
+
+      - name: Upload PR Object as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-object
+          path: pr_object.json
+      # - name: Get user's email
+      #   id: user_email
+      #   run: |
+      #     git checkout remotes/origin/${{ github.head_ref }}
+      #     echo "::set-output name=user_email::$(git log -n 1 --pretty=format:%ae)"
 
