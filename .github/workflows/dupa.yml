@@ -33,6 +33,17 @@ jobs:
           echo "pr_title=$PR_TITLE" >> $GITHUB_ENV
           echo "pr_author=$PR_AUTHOR" >> $GITHUB_ENV
           echo "pr_author_email=$PR_AUTHOR_EMAIL" >> $GITHUB_ENV
+
+      - name: Dump PR Object to File (Proper JSON Formatting)
+        run: |
+          printf '%s' '${{ toJSON(github.event.pull_request) }}' | jq '.' > pr_object.json
+        shell: bash
+
+      - name: Upload PR Object as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-object
+          path: pr_object.json
           
       - name: Check PR Title Format
         run: |
