@@ -16,3 +16,10 @@ jobs:
 
       - run: |
           gh pr list
+
+      - name: Get user's email
+        id: user_email
+        run: |
+          git checkout remotes/origin/${{ github.head_ref }}
+          echo "::set-output name=user_email::$(git log -n 1 --pretty=format:%ae)"
+
