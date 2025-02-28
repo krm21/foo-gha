@@ -1,4 +1,4 @@
-print("dupa")
+print("☠️")
 print("elo")
 print("☃️")
 print("🍑")
