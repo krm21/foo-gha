@@ -1,4 +1,4 @@
 print("☠️")
-print("elo")
+print(".")
 print("☃️")
 print("🍑")
