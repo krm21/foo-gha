@@ -1,133 +1,27 @@
-name: PR Title Check
+name: Dump PR Object
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  check_pr_details:
+  debug-pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Get PR Details
-        id: pr_details
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Store PR Object in an Environment Variable
         run: |
-          echo "Fetching PR details..."
-          
-          PR_TITLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r '.title')
+          echo '${{ toJSON(github.event.pull_request) }}' > pr_raw.json
+        shell: bash
 
-          PR_AUTHOR=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r '.user.login')
-
-          PR_AUTHOR_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/commits/${{ github.event.pull_request.head.sha }}" | jq -r '.commit.author.email')
-
-          if [[ "$PR_AUTHOR_EMAIL" == *"noreply.github.com" ]]; then
-            PR_AUTHOR_EMAIL="Private Email (noreply)"
-          fi
-
-          echo "PR Title: $PR_TITLE"
-          echo "PR Author: $PR_AUTHOR"
-          echo "PR Email: $PR_AUTHOR_EMAIL"
-
-          echo "pr_title=$PR_TITLE" >> $GITHUB_ENV
-          echo "pr_author=$PR_AUTHOR" >> $GITHUB_ENV
-          echo "pr_author_email=$PR_AUTHOR_EMAIL" >> $GITHUB_ENV
-
-      - name: Dump PR Object to File (Proper JSON Formatting)
-        run: |
-          printf '%s' '${{ toJSON(github.event.pull_request) }}' > pr_object.json
+      - name: Format PR Object Properly
+        run: cat pr_raw.json | jq '.' > pr_object.json
         shell: bash
 
       - name: Upload PR Object as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: pr-object
           path: pr_object.json
-          
-      - name: Check PR Title Format
-        run: |
-          echo "Validating PR title..."
-          if ! echo "$pr_title" | grep -Eq "^DUPA-[0-9]{1,10}"; then
-            echo "❌ PR title must start with 'DUPA-' followed by 1 to 10 digits."
-            exit 1
-          fi
-          echo "✅ PR title is valid."
-
-
-# name: PR Commenter
-
-# on:
-#   pull_request:
-#     branches:
-#       - main
-#     types: [opened, synchronize, reopened]
-
-# jobs:
-#   add-comment:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Add comment to PR
-#         uses: peter-evans/create-or-update-comment@v4
-#         with:
-#           issue-number: ${{ github.event.pull_request.number }}
-#           body: |
-#             🚀 Thanks for your pull request!
-#             Our team will review it soon. Stay tuned for updates! 😊
-#           reactions: '+1, heart'
-
-
-# name: Github actions repo and pr creation
-# on: [push]
-# jobs:
-#   create-pr:
-#     runs-on: ubuntu-latest
-#     env:
-#       XD: ${{ secrets.DUPA_SECRET }}
-#     steps:
-#       - uses: actions/checkout@v4
-#         with: 
-#           repository: krm21/myaction
-#           token: ${{ secrets.MYACTION_TOKEN }}
-#           path: private-action
-
-#       - run: |
-#           find
-          
-#       - uses: ./private-action/foo/bar
-#         with: 
-#           message: ☠️☠️💀
-      # - uses: krm21/js-action@main
-      #   with:
-      #     message: 🍕🌃☃️
-      # - uses: actions/checkout@v4
-      # - run: |
-      #     echo ${{ github.event_name }}
-      #     git log --oneline -5
-      #     echo $XD
-      # - uses: krm21/myaction@main
-      #   with:
-      #     message: 🥳🍺😎
-
-# name: GitHub Actions Demo
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on: [push]
-# jobs:
-#   Explore-GitHub-Actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-#       - name: Check out repository code
-#         uses: actions/checkout@v4
-#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-#       - name: List files in the repository
-#         run: |
-#           ls ${{ github.workspace }}
-#       - run: echo "🍏 This job's status is ${{ job.status }}."
-#       - run: |
-#           echo $GITHUB_SHA
-    
