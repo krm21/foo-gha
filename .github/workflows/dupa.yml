@@ -40,7 +40,7 @@ jobs:
         shell: bash
 
       - name: Upload PR Object as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pr-object
           path: pr_object.json
