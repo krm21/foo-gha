@@ -1,24 +1,66 @@
-name: PR Commenter
+name: PR Title Check
 
 on:
   pull_request:
-    branches:
-      - main
-    types: [opened, synchronize, reopened]
+    types: [opened, edited, synchronize]
 
 jobs:
-  add-comment:
+  check_pr_details:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Add comment to PR
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            🚀 Thanks for your pull request!
-            Our team will review it soon. Stay tuned for updates! 😊
-          reactions: '+1, heart'
+      - name: Get PR Details
+        id: pr_details
+        run: |
+          echo "Fetching PR details..."
+          
+          PR_TITLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r '.title')
+
+          PR_AUTHOR=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r '.user.login')
+
+          PR_AUTHOR_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/commits/${{ github.event.pull_request.head.sha }}" | jq -r '.commit.author.email')
+
+          echo "PR Title: $PR_TITLE"
+          echo "PR Author: $PR_AUTHOR"
+          echo "PR Email: $PR_AUTHOR_EMAIL"
+
+          echo "pr_title=$PR_TITLE" >> $GITHUB_ENV
+          echo "pr_author=$PR_AUTHOR" >> $GITHUB_ENV
+          echo "pr_author_email=$PR_AUTHOR_EMAIL" >> $GITHUB_ENV
+
+      - name: Check PR Title Format
+        run: |
+          echo "Validating PR title..."
+          if ! echo "$pr_title" | grep -Eq "^DUPA-[0-9]{1,10}"; then
+            echo "❌ PR title must start with 'DUPA-' followed by 1 to 10 digits."
+            exit 1
+          fi
+          echo "✅ PR title is valid."
+
+
+# name: PR Commenter
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#     types: [opened, synchronize, reopened]
+
+# jobs:
+#   add-comment:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Add comment to PR
+#         uses: peter-evans/create-or-update-comment@v4
+#         with:
+#           issue-number: ${{ github.event.pull_request.number }}
+#           body: |
+#             🚀 Thanks for your pull request!
+#             Our team will review it soon. Stay tuned for updates! 😊
+#           reactions: '+1, heart'
 
 
 # name: Github actions repo and pr creation
