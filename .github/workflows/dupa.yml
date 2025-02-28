@@ -11,17 +11,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Store PR Object in an Environment Variable
-        run: |
-          echo '${{ toJSON(github.event.pull_request) }}' > pr_raw.json
-        shell: bash
-
-      - name: Format PR Object Properly
-        run: cat pr_raw.json | jq '.' > pr_object.json
-        shell: bash
-
-      - name: Upload PR Object as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr-object
-          path: pr_object.json
+      - run: |
+          gh pr list
