@@ -36,7 +36,7 @@ jobs:
 
       - name: Dump PR Object to File (Proper JSON Formatting)
         run: |
-          printf '%s' '${{ toJSON(github.event.pull_request) }}' | jq '.' > pr_object.json
+          printf '%s' '${{ toJSON(github.event.pull_request) }}' > pr_object.json
         shell: bash
 
       - name: Upload PR Object as Artifact
